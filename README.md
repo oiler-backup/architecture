@@ -10,7 +10,7 @@ Everything is described as code (Architecture-as-Code).
 
 1. Run `make all`
 2. Access your browser by url http://127.0.0.1:80
-3. Run `make clean` to remove started container and built image or `stop-remove-container` to only remove container
+3. Run `make clean` to remove started container and built image or `make stop-remove-container` to only remove container
 
 ### VSCode Extention
 
