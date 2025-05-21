@@ -1,0 +1,10 @@
+views {
+    view index {
+        title 'Landscape view'
+        description 'Existing projects architecure'
+        link https://github.com/oiler-backup 'Project Source'
+        include kubernetes_operator with {
+            navigateTo context
+        }
+    }
+}

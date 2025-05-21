@@ -1,0 +1,23 @@
+model {
+    extend backup_operator_system {
+        #container
+        operator_cli = application {
+            #container
+            title "Backup Operator CLI"
+            description "Is used to simplify interraction with backups"
+            link https://github.com/oiler-backup/cli 'CLI Source Repo'
+
+            -> operator "interracts with"
+        }
+
+        operator = application {
+            #container
+            title "Backup Kubernetes Operator"
+            description "Kubernetes Operator and its adapters"
+
+            -> storage "backups"
+        }
+    }
+
+
+}

@@ -1,0 +1,65 @@
+views {
+    view operator of backup_operator_system.operator {
+        title "Operator Code level"
+        description "Main structures used"
+        style * {
+            opacity 40%
+        }
+        include adapters.mongodb_adapter,
+                adapters.mysql_adapter,
+                adapters.postgresql_adapter,
+
+        include core.*,
+        include * ->
+            where source.tag is #code
+        include -> *
+            where target.tag is #code
+    }
+
+    view postgresql_adapter of backup_operator_system.operator.adapters.postgresql_adapter {
+        title "PostgreSQL Adapter Code level"
+        description "Main structures used"
+        include backup_operator_system.operator.adapters.postgresql_adapter.**
+        include * ->
+            where source.tag is #code
+        include -> *
+            where target.tag is #code
+    }
+
+    view mysql_adapter of backup_operator_system.operator.adapters.mysql_adapter {
+        title "MySQL Adapter Code level"
+        description "Main structures used"
+        include backup_operator_system.operator.adapters.mysql_adapter.**
+        include * ->
+            where source.tag is #code
+        include -> *
+            where target.tag is #code
+    }
+
+    view mongodb_adapter of backup_operator_system.operator.adapters.mongodb_adapter {
+        title "MongoDB Adapter Code level"
+        description "Main structures used"
+        include backup_operator_system.operator.adapters.mongodb_adapter.**
+        include * ->
+            where source.tag is #code
+        include -> *
+            where target.tag is #code
+    }
+
+
+    view cli of backup_operator_system.operator_cli {
+        title "CLI Code Level"
+        description "Main structures used"
+        style element.kind = struct {
+            color secondary
+        }
+        style * {
+            opacity 40%
+        }
+        include config,
+                flags,
+                k8s_client,
+                root_cmd.**
+    }
+
+}

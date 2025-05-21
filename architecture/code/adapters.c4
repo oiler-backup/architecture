@@ -1,0 +1,16 @@
+model {
+    extend backup_operator_system.operator.adapters {
+        #code
+        backuper_cron_job = kubernetes_resource {
+            #code
+            title "Backuper CronJob"
+            description "CronJob that does backups"
+        }
+
+        restorer_job = kubernetes_resource {
+            #code
+            title "Restorer Job"
+            description "Job that does restores"
+        }
+    }
+}

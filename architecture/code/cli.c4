@@ -1,0 +1,120 @@
+model {
+    extend backup_operator_system.operator_cli {
+        #code
+        config = struct {
+            #code
+            title "Config Structure"
+            description "Configuration of the CLI"
+            metadata {
+                json '
+                    kube_config_path, required
+                    namespace, required
+                '
+            }
+        }
+
+        flags = struct {
+            #code
+            title "Flags"
+            description "Available flags for commands"
+        }
+
+        k8s_client = struct {
+            #code
+            title "Kubernetes Client"
+            description "Client to communicate with Kubernetes"
+
+            -> config
+        }
+
+        root_cmd = struct {
+            #code
+            title "Root Command"
+            description "Top-level command"
+
+            adapter_cmd = struct {
+                #code
+                title "Adapter Command"
+                description "Command to work with adapters"
+
+                add_cmd = struct {
+                    title "Add Command"
+                    description "Adds new adapter"
+
+                    -> k8s_client "uses"
+                }
+
+                delete_cmd = struct {
+                    title "Delete Command"
+                    description "Deletes existing adapter"
+
+                    -> k8s_client
+                }
+
+                list_cmd = struct {
+                    title "List Command"
+                    description "Lists all active adapters"
+
+                    -> k8s_client
+                }
+            }
+
+            config_cmd = struct {
+                #code
+                title "Config Command"
+                description "Configurates CLI"
+
+                set_cmd = struct {
+                    title "Set Command"
+                    description "Sets configuration parameter"
+                }
+
+                get_cmd = struct {
+                    title "Get Command"
+                    description "Prints current config"
+                }
+            }
+
+            backup_cmd = struct {
+                #code
+                title "Backup Command"
+                description "Manages BackupRequests"
+
+                list_cmd = struct {
+                    #code
+                    title "List Command"
+                    description "Lists all BackupRequests"
+
+                    -> k8s_client
+                }
+
+                create_cmd = struct {
+                    #code
+                    title "Create Command"
+                    description "Creates BackupRequest"
+
+                    -> k8s_client
+                    -> flags
+                }
+
+                delete_cmd = struct {
+                    #code
+                    title "Delete Command"
+                    description "Deletes BackupRequest"
+
+                    -> k8s_client
+                    -> flags
+                }
+
+                update_cmd = struct {
+                    #code
+                    title "Update Command"
+                    description "Updates existing BackupRequest"
+
+                    -> k8s_client
+                    -> flags
+                }
+            }
+        }
+    }
+}

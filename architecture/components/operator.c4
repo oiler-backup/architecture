@@ -1,0 +1,101 @@
+model {
+    extend backup_operator_system.operator {
+        core = application {
+            #component
+            title "Operator Core"
+            description "Kubernetes Operator itself. Watches resources and calls adapters"
+            link https://github.com/oiler-backup/core 'Core Source Repo'
+            metadata {
+                metrics_port: "8443/TCP"
+                grpc_api_port: "50051/TCP"
+            }
+
+            -> backup_request "watches for"
+            -> backup_restore "watches for"
+            -> adapters "calls adapters"
+        }
+
+        adapters = applications {
+            #component
+            title "Operator Adapters"
+            description "Adapters for specific Database Management Systems"
+
+            postgresql_adapter = application {
+                #component
+                title "PostgreSQL Adapter"
+                description "Adapter for backing up PostgreSQL"
+                metadata {
+                    port: "50051/TCP"
+                    protocol: "gRPC"
+                }
+
+                -> core "reports metrics"
+            }
+
+            mysql_adapter = application {
+                #component
+                title "MySQL Adapter"
+                description "Adapter for backing up MySQL"
+                metadata {
+                    port: "50051/TCP"
+                    protocol: "gRPC"
+                }
+
+                -> core "reports metrics"
+            }
+
+            mongodb_adapter = application {
+                #component
+                title "MongoDB Adapter"
+                description "Adapter for backing up MongoDB"
+                metadata {
+                    port: "50051/TCP"
+                    protocol: "gRPC"
+                }
+
+                -> core "reports metrics"
+            }
+        }
+
+        backup_request = kubernetes_resource {
+            #component
+            title "BackupRequest Custom Resource"
+            description "Custom resource to describe backup rules"
+            metadata {
+                example '
+                    apiVersion: backup.oiler.backup/v1
+                    kind: BackupRequest
+                    metadata:
+                        name: backuprequest-sample
+                    spec:
+                        dbSpec:
+                            uri: "postgres.default.svc.cluster.local"
+                            port: 5432
+                            user: "admin"
+                            pass: "password"
+                            dbName: "mydatabase"
+                            dbType: "postgres"
+                        s3Spec:
+                            endpoint: "https://my.aws.s3.com:443"
+                            bucketName: "bucket"
+                            auth:
+                            accessKey: "access-key-id"
+                            secretKey: "secret-key"
+                        schedule: "*/1 * * * *"
+                        maxBackupCount: 2
+                '
+            }
+        }
+
+        backup_restore = kubernetes_resource {
+            #component
+            title "BackupRestore Custom Resource"
+            description "Custom resource to describe restore rules"
+
+            metadata {
+                // TODO:
+                example ''
+            }
+        }
+    }
+}

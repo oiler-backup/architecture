@@ -1,0 +1,19 @@
+views {
+    view context {
+        title "Context"
+        description "Top-level description of a project"
+        group 'Users' {
+            color muted
+            opacity 30%
+            include devops_engineer,
+                    database_administrator,
+                    developer
+        }
+        include backup_operator_system with {
+                    navigateTo containers
+                },
+                s3,
+                prometheus_stack,
+                storage
+    }
+}

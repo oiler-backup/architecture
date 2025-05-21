@@ -1,0 +1,88 @@
+specification {
+    tag context
+    tag container
+    tag component
+    tag code
+
+    relationship optional {
+        line dotted
+        color red
+    }
+    color beige #ab9267
+
+    element storage {
+        notation "Any data storage"
+        style {
+            color beige
+            shape cylinder
+        }
+    }
+
+    element cloud {
+        notation "Any Kubernetes-based cloud"
+        style {
+            color blue
+            icon tech:kubernetes
+        }
+    }
+
+    element application {
+        notation "Any software application"
+        style {
+            color indigo
+            icon tech:go
+        }
+    }
+
+    element kubernetes_resource {
+        notation "Any Kubernetes resource"
+        style {
+            color blue
+            icon tech:yaml
+        }
+    }
+
+    element applications {
+        notation "Many software applications"
+        style {
+            color indigo
+            multiple true
+        }
+    }
+
+    element external_system {
+        notation "Any external system"
+        style {
+            color amber
+        }
+    }
+
+    element internal_system {
+        notation "Any internal system"
+        style {
+            color indigo
+        }
+    }
+
+    element user {
+        notation "Any stakeholder"
+        style {
+            color green
+            shape person
+        }
+    }
+
+    element struct {
+        notation "Any structure in code base"
+        style {
+            color beige
+        }
+    }
+
+    element project {
+        notation "Active project"
+        style {
+            color amber
+        }
+    }
+}

@@ -1,0 +1,46 @@
+model {
+    extend backup_operator_system.operator.core {
+        #code
+        config = struct {
+            #code
+            title "Config Structure"
+            description "Configuration of the operator"
+            metadata {
+                envs '
+                    OPERATOR_NAMESPACE, default "oiler-backup-system"
+                '
+            }
+        }
+
+        backup_request_reconciler = struct {
+            #code
+            title "BackupRequestReconciler Structure"
+            description "BackupRequest resources watcher"
+
+            -> config "reads"
+            -> adapters_config_map "reads"
+            -> backup_operator_system.operator.backup_request "sets status"
+            -[optional]-> backup_operator_system.operator.adapters.postgresql_adapter.scheduler
+            -[optional]-> backup_operator_system.operator.adapters.mysql_adapter.scheduler
+            -[optional]-> backup_operator_system.operator.adapters.mongodb_adapter.scheduler
+        }
+
+        adapters_config_map = kubernetes_resource {
+            #code
+            title "Adapters configuration ConfigMap"
+            description "Adapter Name to URL Mapping"
+            metadata {
+                example '
+                    apiVersion: v1
+                    kind: ConfigMap
+                    metadata:
+                        name: database-config
+                        namespace: oiler-backup-system
+                    data:
+                        postgres: "adapter.url:50051"
+                '
+            }
+        }
+    }
+
+}

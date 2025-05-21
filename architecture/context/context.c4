@@ -1,0 +1,60 @@
+model {
+    backup_operator_system = internal_system {
+        #context
+        title "Backup Kubernetes Operator"
+        description "Operator for automated database backups"
+
+        -> s3 "loads backup to"
+        -> storage "backups and restores"
+    }
+
+
+    storage = storage {
+        #context
+        title "Some Database Management System"
+        description "A system to backup and restore"
+    }
+
+    s3 = storage {
+        #context
+        title "S3 Compatible Storage"
+        description "A place to store backups"
+
+        -> backup_operator_system.operator "returns specific backup"
+    }
+
+    prometheus_stack = external_system {
+        #context
+        title "Prometheus Stack"
+        description "Metrics server"
+        style {
+            icon tech:prometheus
+        }
+        -> backup_operator_system.operator "fetches metrics"
+    }
+
+    devops_engineer = user {
+        #context
+        title "DevOps Engineer"
+        description "The one who supports the operator's work"
+
+        -> backup_operator_system.operator "deploys and supports"
+        -> prometheus_stack "monitors and creates alerts"
+    }
+
+    database_administrator = user {
+        #context
+        title "Database Administrator"
+        description "Someone who checks backups and restores them as needed"
+
+        -> backup_operator_system.operator_cli "uses to create backups and restores"
+    }
+
+    developer = user {
+        #context
+        title "Developer"
+        description "Someone who is interested in data safety"
+
+        -> storage "uses"
+    }
+}

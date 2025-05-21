@@ -1,0 +1,19 @@
+views {
+    view components of backup_operator_system.operator {
+        title "Components level"
+        description "Main components of the operator"
+        style * {
+            opacity 40%
+        }
+        include *,
+        include adapters._
+        include core with {
+            navigateTo operator
+        }
+
+        include * ->
+            where source.tag is #component
+        include -> *
+            where target.tag is #component
+    }
+}

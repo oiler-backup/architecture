@@ -1,0 +1,84 @@
+model {
+    extend backup_operator_system.operator.adapters.mysql_adapter {
+        #code
+        scheduler = application {
+            #code
+            title "Scheduler"
+            description "Receives requests from core and runs Kubernetes resources"
+            config = struct {
+                #code
+                title "Config Structure"
+                description "Configuration of the adapter"
+                metadata {
+                    envs '
+                        SYSTEM_NAMESPACE, required
+                        BACKUPER_VERSION, default "ashadrinnn/pgbackuper:0.0.1-0"
+                        RESTORER_VERSION, default "sveb00/pgrestorer:0.0.1-1"
+                        PORT, default "50051"
+                    '
+                }
+            }
+
+            backup_server = struct {
+                #code
+                title "Backup Server structure"
+                description "gRPC Server for accepting commands from core"
+
+                -> config "reads"
+                -> backuper.backuper "creates CronJob with"
+                -> restorer.restorer "creates Job with"
+            }
+        }
+
+        backuper = application {
+            #code
+            title "Backuper"
+            description "Does backups"
+            config = struct {
+                #code
+                title "Config Structure"
+                description "Configuration of the adapter"
+                metadata {
+                    envs '
+                        DB_HOST, required
+                        DB_PORT, required
+                        DB_USER, required
+                        DB_PASSWORD, required
+                        DB_NAME, required
+                        CORE_ADDR, required
+                        S3_ENDPOINT, required
+                        S3_ACCESS_KEY, required
+                        S3_SECRET_KEY, required
+                        S3_BUCKET_NAME, required
+                        MAX_BACKUP_COUNT, default "0"
+                        SECURE, default "false"
+                    '
+                }
+            }
+
+            backuper = struct {
+                #code
+                title "Backuper Structure"
+                description "Directly does backup"
+
+                metadata {
+                    cli: "mysqldump"
+                }
+
+                -> backup_operator_system.operator.core "sends result"
+                -> backup_operator_system.operator.adapters.backuper_cron_job "creates"
+            }
+        }
+
+        // TODO:
+        restorer = application {
+            #code
+            title "Restorer"
+            description "Does restores"
+            restorer = struct{
+
+                -> backup_operator_system.operator.adapters.restorer_job "creates"
+            }
+        }
+    }
+}

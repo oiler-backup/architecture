@@ -1,0 +1,18 @@
+views {
+    view containers of backup_operator_system {
+        title "Container level"
+        description "Main containers of the operator"
+        style * {
+            opacity 40%
+        }
+        include backup_operator_system.operator with {
+                    navigateTo components
+                },
+                backup_operator_system.operator_cli
+
+        include * ->
+            where source.tag is #container
+        include -> *
+            where target.tag is #container
+    }
+}
