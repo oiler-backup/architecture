@@ -115,6 +115,47 @@ model {
                     -> flags
                 }
             }
+
+            restore_cmd = struct {
+                #code
+                title "Backup Restore Command"
+                description "Manages BackupRestorers"
+
+                list_cmd = struct {
+                    #code
+                    title "List Command"
+                    description "Lists all BackupRestorers"
+
+                    -> k8s_client
+                }
+
+                create_cmd = struct {
+                    #code
+                    title "Create Command"
+                    description "Creates BackupRestorers"
+
+                    -> k8s_client
+                    -> flags
+                }
+
+                delete_cmd = struct {
+                    #code
+                    title "Delete Command"
+                    description "Deletes BackupRestorers"
+
+                    -> k8s_client
+                    -> flags
+                }
+
+                update_cmd = struct {
+                    #code
+                    title "Update Command"
+                    description "Updates existing BackupRestorers"
+
+                    -> k8s_client
+                    -> flags
+                }
+            }
         }
     }
 }

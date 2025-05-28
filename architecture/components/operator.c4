@@ -91,10 +91,28 @@ model {
             #component
             title "BackupRestore Custom Resource"
             description "Custom resource to describe restore rules"
-
             metadata {
-                // TODO:
-                example ''
+                example '
+                    apiVersion: backup.oiler.backup/v1
+                    kind: BackupRestore
+                    metadata:
+                        name: backuprestore-sample
+                    spec:
+                        dbSpec:
+                            uri: "postgres.default.svc.cluster.local"
+                            port: 5432
+                            user: "admin"
+                            pass: "password"
+                            dbName: "mydatabase"
+                            dbType: "postgres"
+                        s3Spec:
+                            endpoint: "https://my.aws.s3.com:443"
+                            bucketName: "bucket"
+                            auth:
+                            accessKey: "access-key-id"
+                            secretKey: "secret-key"
+                        backupRevision: "0"
+                '
             }
         }
     }
