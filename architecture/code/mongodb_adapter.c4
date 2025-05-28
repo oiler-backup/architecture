@@ -70,13 +70,40 @@ model {
             }
         }
 
-        // TODO:
         restorer = application {
             #code
             title "Restorer"
             description "Does restores"
+            config = struct {
+                #code
+                title "Config Structure"
+                description "Configuration of the adapter"
+                metadata {
+                    envs '
+                        DB_HOST, required
+                        DB_PORT, required
+                        DB_USER, required
+                        DB_PASSWORD, required
+                        DB_NAME, required
+                        CORE_ADDR, required
+                        S3_ENDPOINT, required
+                        S3_ACCESS_KEY, required
+                        S3_SECRET_KEY, required
+                        S3_BUCKET_NAME, required
+                        BACKUP_REVISION, required
+                    '
+                }
+            }
             restorer = struct{
+                #code
+                title "Restorer Structure"
+                description "Does restores"
 
+                metadata {
+                    cli: "mongorestore"
+                }
+
+                -> backup_operator_system.operator.core "sends result"
                 -> backup_operator_system.operator.adapters.restorer_job "creates"
             }
         }

@@ -25,6 +25,19 @@ model {
             -[optional]-> backup_operator_system.operator.adapters.mongodb_adapter.scheduler
         }
 
+        backup_restore_reconciler = struct {
+            #code
+            title "BackupRestoreReconciler Structure"
+            description "BackupRestore resources watcher"
+
+            -> config "reads"
+            -> adapters_config_map "reads"
+            -> backup_operator_system.operator.backup_restore "sets status"
+            -[optional]-> backup_operator_system.operator.adapters.postgresql_adapter.scheduler
+            -[optional]-> backup_operator_system.operator.adapters.mysql_adapter.scheduler
+            -[optional]-> backup_operator_system.operator.adapters.mongodb_adapter.scheduler
+        }
+
         adapters_config_map = kubernetes_resource {
             #code
             title "Adapters configuration ConfigMap"
